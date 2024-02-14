@@ -12,30 +12,34 @@
 #pragma once
 #include <cmath>
 
-enum EActivationFunction : int {
+enum class EActivationFunction {
     HEAVISIDE_STEP_FUNCTION,
     SIGMOID_FUNCTION,
     HYPERBOLIC_TANGENT_FUNCTION
 };
 
-double ActivationFunction(double x, EActivationFunction activationFunction);
+class ActivationLib {
+public:
 
-double ActivationFunctionDerivative(double x, EActivationFunction activationFunction);
+    static double ActivationFunction(double x, EActivationFunction activationFunction);
 
-inline double HeavisideStepFunction(const double x) { return x > 0.0 ? 1.0 : 0.0; }
+    static double ActivationFunctionDerivative(double x, EActivationFunction activationFunction);
 
-inline double SigmoidFunction(const double x) { return 1.0 / (1.0 + std::exp(-x)); }
+    static double HeavisideStepFunction(const double x) { return x > 0.0 ? 1.0 : 0.0; }
 
-inline double HyperbolicTangentFunction(const double x) { return std::tanh(x); }
+    static double SigmoidFunction(const double x) { return 1.0 / (1.0 + std::exp(-x)); }
 
-inline double HeavisideStepFunctionDerivative(const double x) { return 0.0; }
+    static double HyperbolicTangentFunction(const double x) { return std::tanh(x); }
 
-inline double SigmoidFunctionDerivative(const double x) {
-    const auto sigmoidOfX = SigmoidFunction(x);
-    return sigmoidOfX * (1.0 - sigmoidOfX);
-}
+    static double HeavisideStepFunctionDerivative(const double x) { return 0.0; }
 
-inline double HyperbolicTangentFunctionDerivative(const double x) {
-    const auto hyperbolicTangentOfX = HyperbolicTangentFunction(x);
-    return 1.0 - hyperbolicTangentOfX * hyperbolicTangentOfX;
-}
+    static double SigmoidFunctionDerivative(const double x) {
+        const auto sigmoidOfX = SigmoidFunction(x);
+        return sigmoidOfX * (1.0 - sigmoidOfX);
+    }
+
+    static double HyperbolicTangentFunctionDerivative(const double x) {
+        const auto hyperbolicTangentOfX = HyperbolicTangentFunction(x);
+        return 1.0 - hyperbolicTangentOfX * hyperbolicTangentOfX;
+    }
+};

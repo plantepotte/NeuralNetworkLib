@@ -10,20 +10,13 @@
 // //////////////////////////////
 
 #pragma once
-#include "ActivationLib.h"
 #include <vector>
-
-#include "Eigen/Eigen"
-
 #include "NeuronLayer.h"
 
 
 class NuralNetwork {
 
 private:
-    EActivationFunction _inputActivationFunction = HEAVISIDE_STEP_FUNCTION;
-    EActivationFunction _outputActivationFunction = SIGMOID_FUNCTION;
-
     int _numInputs{};
     int _numOutputs{};
     int _numHiddenLayers{};
@@ -33,18 +26,24 @@ private:
     std::vector<NeuronLayer> _layers{};
 
 public:
+    EActivationFunction inputActivationFunction{};
+    EActivationFunction outputActivationFunction{};
+    EActivationFunction hiddenActivationFunction{};
+    
     NuralNetwork() = default;
     NuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer, double learningRate);
 
     void SetInputActivationFunction(const EActivationFunction activationFunction) {
-        _inputActivationFunction = activationFunction;
+        inputActivationFunction = activationFunction;
     }
 
     void SetOutputActivationFunction(const EActivationFunction activationFunction) {
-        _outputActivationFunction = activationFunction;
+        outputActivationFunction = activationFunction;
     }
 
     Eigen::Vector<double, Eigen::Dynamic> FeedForward(const Eigen::Vector<double, Eigen::Dynamic>& inputs);
 
-    void BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs, const Eigen::Vector<double, Eigen::Dynamic>& targets);
+    double BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs, const Eigen::Vector<double, Eigen::Dynamic>& targets);
+
+    std::string Train(const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& inputs, const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& targets, int numEpochs);
 };

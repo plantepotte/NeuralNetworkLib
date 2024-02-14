@@ -1,14 +1,12 @@
 ﻿#include "NeuronLayer.h"
 
-#include "ActivationLib.h"
-
 void NeuronLayer::CalcOutputs() {
     // perform the dot product of the weights and inputs and add the biases
     _outputs = _weights * _inputs + _biases;
 
     // Apply the activation function to each output
     for (double& output : _outputs) {
-        output = ActivationFunction(output, activationFunction);
+        output = ActivationLib::ActivationFunction(output, activationFunction);
     }
 }
 

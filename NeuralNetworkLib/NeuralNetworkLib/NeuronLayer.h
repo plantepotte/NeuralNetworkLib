@@ -12,9 +12,9 @@
 #pragma once
 // using Eigen 3.4.0 (https://eigen.tuxfamily.org/index.php?title=Main_Page)
 // for linear algebra operations and data structures
+#include "ActivationLib.h"
 #include "Eigen/Eigen"
 
-enum EActivationFunction : int;
 class Neuron;
 
 class NeuronLayer {
@@ -35,8 +35,12 @@ public:
     NeuronLayer() = default;
     NeuronLayer(int numberOfNeurons, int numberOfNeuronInputs);
 
-    Eigen::Vector<double, Eigen::Dynamic> GetOutputs() const { return _outputs; }
+    Eigen::Vector<double, Eigen::Dynamic>& GetOutputs() { return _outputs; }
 
     Eigen::Vector<double, Eigen::Dynamic> CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& inputs);
+
+    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& GetWeights() { return _weights; }
+
+    Eigen::Vector<double, Eigen::Dynamic>& GetBiases() { return _biases; }
     
 };
