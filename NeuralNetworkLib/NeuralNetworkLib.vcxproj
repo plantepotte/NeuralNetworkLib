@@ -155,12 +155,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="NeuralNetworkLib.cpp" />
-    <ClCompile Include="NeuralNetworkLib\Neuron.cpp" />
+    <ClCompile Include="NeuralNetworkLib\ActivationLib.cpp" />
     <ClCompile Include="NeuralNetworkLib\NeuronLayer.cpp" />
     <ClCompile Include="NeuralNetworkLib\NuralNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NeuralNetworkLib\Neuron.h" />
+    <ClInclude Include="NeuralNetworkLib\ActivationLib.h" />
     <ClInclude Include="NeuralNetworkLib\NeuronLayer.h" />
     <ClInclude Include="NeuralNetworkLib\NuralNetwork.h" />
   </ItemGroup>
