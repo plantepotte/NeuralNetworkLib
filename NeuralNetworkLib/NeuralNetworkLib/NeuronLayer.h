@@ -10,6 +10,8 @@
 // //////////////////////////////
 
 #pragma once
+// using Eigen 3.4.0 (https://eigen.tuxfamily.org/index.php?title=Main_Page)
+// for linear algebra operations and data structures
 #include "Eigen/Eigen"
 
 enum EActivationFunction : int;
@@ -36,4 +38,5 @@ public:
     Eigen::Vector<double, Eigen::Dynamic> GetOutputs() const { return _outputs; }
 
     Eigen::Vector<double, Eigen::Dynamic> CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& inputs);
+    
 };

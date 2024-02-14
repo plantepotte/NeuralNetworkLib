@@ -13,7 +13,10 @@
 #include "ActivationLib.h"
 #include <vector>
 
-class NeuronLayer;
+#include "Eigen/Eigen"
+
+#include "NeuronLayer.h"
+
 
 class NuralNetwork {
 
@@ -40,4 +43,8 @@ public:
     void SetOutputActivationFunction(const EActivationFunction activationFunction) {
         _outputActivationFunction = activationFunction;
     }
+
+    Eigen::Vector<double, Eigen::Dynamic> FeedForward(const Eigen::Vector<double, Eigen::Dynamic>& inputs);
+
+    void BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs, const Eigen::Vector<double, Eigen::Dynamic>& targets);
 };
