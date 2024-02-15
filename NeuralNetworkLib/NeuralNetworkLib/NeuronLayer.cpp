@@ -3,11 +3,6 @@
 void NeuronLayer::CalcOutputs() {
     // perform the dot product of the weights and inputs and add the biases
     _outputs = _weights * _inputs + _biases;
-
-    // Apply the activation function to each output
-    for (double& output : _outputs) {
-        output = ActivationLib::ActivationFunction(output, activationFunction);
-    }
 }
 
 NeuronLayer::NeuronLayer(int numberOfNeurons, int numberOfNeuronInputs): numNeurons(numberOfNeurons), numNeuronInputs(numberOfNeuronInputs) {
@@ -21,5 +16,10 @@ NeuronLayer::NeuronLayer(int numberOfNeurons, int numberOfNeuronInputs): numNeur
 Eigen::Vector<double, Eigen::Dynamic> NeuronLayer::CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& inputs) {
     _inputs = inputs;
     CalcOutputs();
-    return _outputs;
+    Eigen::Vector<double, Eigen::Dynamic> outputs = _outputs;
+    // Apply the activation function to each output
+    for (double& output : outputs) {
+        output = ActivationLib::ActivationFunction(output, activationFunction);
+    }
+    return outputs;
 }

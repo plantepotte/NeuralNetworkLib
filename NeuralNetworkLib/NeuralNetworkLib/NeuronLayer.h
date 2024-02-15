@@ -35,12 +35,14 @@ public:
     NeuronLayer() = default;
     NeuronLayer(int numberOfNeurons, int numberOfNeuronInputs);
 
-    Eigen::Vector<double, Eigen::Dynamic>& GetOutputs() { return _outputs; }
+    Eigen::Vector<double, Eigen::Dynamic>& Outputs() { return _outputs; }
 
     Eigen::Vector<double, Eigen::Dynamic> CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& inputs);
 
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& GetWeights() { return _weights; }
+    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& Weights() { return _weights; }
 
-    Eigen::Vector<double, Eigen::Dynamic>& GetBiases() { return _biases; }
+    Eigen::Vector<double, Eigen::Dynamic>& Biases() { return _biases; }
+
+    Eigen::Vector<double, Eigen::Dynamic>& Inputs() { return _inputs; }
     
 };
