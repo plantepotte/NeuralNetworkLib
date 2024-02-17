@@ -14,7 +14,7 @@
 #include "NeuralNetworkLib/NuralNetwork.h"
 
 int main(int argc, char* argv[]) {
-    NuralNetwork nuralNetwork(2, 1, 2, 3, 1);
+    NuralNetwork nuralNetwork(2, 1, 3, 2, 0.1);
     nuralNetwork.SetInputActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
     nuralNetwork.SetOutputActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
     nuralNetwork.SetHiddenActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
                                         std::vector<double>{0},
                                         std::vector<double>{1},
                                         std::vector<double>{1},
-                                        std::vector<double>{1}
-                                    }, 2) <<
+                                        std::vector<double>{0}
+                                    }, 1e-3, 1e4) <<
         '\n';
 
     std::cout << std::fixed;

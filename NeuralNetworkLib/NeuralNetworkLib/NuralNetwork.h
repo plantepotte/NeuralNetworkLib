@@ -51,4 +51,5 @@ public:
     double BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs, const Eigen::Vector<double, Eigen::Dynamic>& targets);
 
     std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, int numEpochs);
+    std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, double maxError = 1e-3, int maxEpochs = 1000);
 };
