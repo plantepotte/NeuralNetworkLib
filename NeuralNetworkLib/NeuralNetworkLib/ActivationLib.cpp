@@ -17,7 +17,7 @@ double ActivationLib::ActivationFunction(const double x, EActivationFunction act
 double ActivationLib::ActivationFunctionDerivative(const double x, EActivationFunction activationFunction) {
     switch (activationFunction) {
     case EActivationFunction::HEAVISIDE_STEP_FUNCTION:
-        return HeavisideStepFunctionDerivative(x);
+        return HeavisideStepFunctionDerivative();
     case EActivationFunction::SIGMOID_FUNCTION:
         return SigmoidFunctionDerivative(x);
     case EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION:

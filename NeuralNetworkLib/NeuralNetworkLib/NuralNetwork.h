@@ -24,9 +24,7 @@ private:
     double _learningRate{};
 
     std::vector<NeuronLayer> _layers{};
-    Eigen::Vector<double, Eigen::Dynamic> _outputDeltas{};
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> _hiddenDeltas{};
-    Eigen::Vector<double, Eigen::Dynamic> _inputDeltas{};
+    std::vector<Eigen::Vector<double, Eigen::Dynamic>> _neuronDeltas{};
 
 public:
     EActivationFunction inputActivationFunction{};
@@ -44,9 +42,13 @@ public:
         outputActivationFunction = activationFunction;
     }
 
+    void SetHiddenActivationFunction(const EActivationFunction activationFunction) {
+        hiddenActivationFunction = activationFunction;
+    }
+
     Eigen::Vector<double, Eigen::Dynamic> FeedForward(const Eigen::Vector<double, Eigen::Dynamic>& inputs);
 
     double BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs, const Eigen::Vector<double, Eigen::Dynamic>& targets);
 
-    std::string Train(const std::vector<std::vector<double>>& inputs, std::vector<std::vector<double>> targets, int numEpochs);
+    std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, int numEpochs);
 };

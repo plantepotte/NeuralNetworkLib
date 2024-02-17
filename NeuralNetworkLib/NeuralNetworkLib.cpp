@@ -14,9 +14,11 @@
 #include "NeuralNetworkLib/NuralNetwork.h"
 
 int main(int argc, char* argv[]) {
-    NuralNetwork nuralNetwork(2, 1, 1, 2, 0.1);
-    nuralNetwork.SetInputActivationFunction(EActivationFunction::SIGMOID_FUNCTION);
-    nuralNetwork.SetOutputActivationFunction(EActivationFunction::HEAVISIDE_STEP_FUNCTION);
+    NuralNetwork nuralNetwork(2, 1, 2, 3, 1);
+    nuralNetwork.SetInputActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
+    nuralNetwork.SetOutputActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
+    nuralNetwork.SetHiddenActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
+    
     std::cout << nuralNetwork.Train(std::vector<std::vector<double>>{
                                         std::vector<double>{0, 0},
                                         std::vector<double>{0, 1},
@@ -31,6 +33,7 @@ int main(int argc, char* argv[]) {
                                     }, 2) <<
         '\n';
 
+    std::cout << std::fixed;
     std::cout << "0, 0: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({0, 0}))[0] << '\n';
     std::cout << "0, 1: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({0, 1}))[0] << '\n';
     std::cout << "1, 0: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({1, 0}))[0] << '\n';

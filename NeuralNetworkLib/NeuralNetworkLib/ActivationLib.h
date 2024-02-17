@@ -31,7 +31,7 @@ public:
 
     static double HyperbolicTangentFunction(const double x) { return std::tanh(x); }
 
-    static double HeavisideStepFunctionDerivative(const double x) { return 0.0; }
+    static double HeavisideStepFunctionDerivative() { return 0.0; }
 
     static double SigmoidFunctionDerivative(const double x) {
         const auto sigmoidOfX = SigmoidFunction(x);
