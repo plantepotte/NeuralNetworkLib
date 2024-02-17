@@ -15,7 +15,8 @@
 enum class EActivationFunction {
     HEAVISIDE_STEP_FUNCTION,
     SIGMOID_FUNCTION,
-    HYPERBOLIC_TANGENT_FUNCTION
+    HYPERBOLIC_TANGENT_FUNCTION,
+    RELU_FUNCTION
 };
 
 class ActivationLib {
@@ -31,6 +32,8 @@ public:
 
     static double HyperbolicTangentFunction(const double x) { return std::tanh(x); }
 
+    static double ReLUFunction(const double x) { return x > 0.0 ? x : 0.0; }
+
     static double HeavisideStepFunctionDerivative() { return 0.0; }
 
     static double SigmoidFunctionDerivative(const double x) {
@@ -42,4 +45,6 @@ public:
         const auto hyperbolicTangentOfX = HyperbolicTangentFunction(x);
         return 1.0 - hyperbolicTangentOfX * hyperbolicTangentOfX;
     }
+
+    static double ReLUFunctionDerivative(const double x) { return x > 0.0 ? 1.0 : 0.0; }
 };

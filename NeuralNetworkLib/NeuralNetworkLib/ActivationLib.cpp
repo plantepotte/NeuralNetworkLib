@@ -10,6 +10,8 @@ double ActivationLib::ActivationFunction(const double x, EActivationFunction act
         return SigmoidFunction(x);
     case EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION:
         return HyperbolicTangentFunction(x);
+    case EActivationFunction::RELU_FUNCTION:
+        return ReLUFunction(x);
     }
     throw std::invalid_argument("Invalid activation function");
 }
@@ -22,6 +24,8 @@ double ActivationLib::ActivationFunctionDerivative(const double x, EActivationFu
         return SigmoidFunctionDerivative(x);
     case EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION:
         return HyperbolicTangentFunctionDerivative(x);
+    case EActivationFunction::RELU_FUNCTION:
+        return ReLUFunctionDerivative(x);
     }
     throw std::invalid_argument("Invalid activation function");
 }
