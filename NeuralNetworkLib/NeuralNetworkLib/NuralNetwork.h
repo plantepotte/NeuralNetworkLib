@@ -27,16 +27,11 @@ private:
     std::vector<Eigen::Vector<double, Eigen::Dynamic>> _neuronDeltas{};
 
 public:
-    EActivationFunction inputActivationFunction{};
     EActivationFunction outputActivationFunction{};
     EActivationFunction hiddenActivationFunction{};
     
     NuralNetwork() = default;
     NuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer, double learningRate);
-
-    void SetInputActivationFunction(const EActivationFunction activationFunction) {
-        inputActivationFunction = activationFunction;
-    }
 
     void SetOutputActivationFunction(const EActivationFunction activationFunction) {
         outputActivationFunction = activationFunction;

@@ -22,6 +22,9 @@ enum class EActivationFunction {
 class ActivationLib {
 public:
 
+    static constexpr double pi = 3.14159265358979323846;
+
+    // f(x) : R -> R
     static double ActivationFunction(double x, EActivationFunction activationFunction);
 
     static double ActivationFunctionDerivative(double x, EActivationFunction activationFunction);
@@ -34,6 +37,7 @@ public:
 
     static double ReLUFunction(const double x) { return x > 0.0 ? x : 0.0; }
 
+    // f'(x) : R -> R
     static double HeavisideStepFunctionDerivative() { return 0.0; }
 
     static double SigmoidFunctionDerivative(const double x) {

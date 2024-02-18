@@ -5,13 +5,13 @@
 NuralNetwork::NuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer,
                            double learningRate) : _numInputs(numInputs), _numOutputs(numOutputs), _numHiddenLayers(numHiddenLayers), _numNeuronsPerHiddenLayer(numNeuronsPerHiddenLayer), _learningRate(learningRate) {
     _layers = std::vector<NeuronLayer>();
-    _layers.reserve(_numHiddenLayers + 2);
+    _layers.reserve(_numHiddenLayers + 1);
 
-    // Add the input layer
-    _layers.emplace_back(_numInputs, _numInputs);
+    // Add the first hidden layer
+    _layers.emplace_back(_numNeuronsPerHiddenLayer, _numInputs);
 
     // Add the hidden layers
-    for (int i = 0; i < _numHiddenLayers; ++i) {
+    for (int i = 0; i < _numHiddenLayers - 1; ++i) {
         _layers.emplace_back(_numNeuronsPerHiddenLayer, _layers.back().numNeurons);
     }
 
@@ -45,13 +45,8 @@ double NuralNetwork::BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& 
     for (int i = numLayers - 1; i >= 0; --i) {
         if (i >= numLayers - 1) {
             for (int j = 0; j < _numOutputs; ++j) {
+                // outputErrors[j] = meanSquareError - outputs[j];
                 _neuronDeltas.back()[j] = outputErrors[j] * ActivationLib::ActivationFunctionDerivative(_layers.back().outputs[j], outputActivationFunction);
-            }
-        }
-        else if (i <= 0) {
-            _neuronDeltas[i] = _layers[i+1].weights.transpose() * _neuronDeltas[i+1];
-            for (int j = 0; j < _neuronDeltas[i].size(); ++j) {
-                _neuronDeltas[i][j] *= ActivationLib::ActivationFunctionDerivative(_layers[i].outputs[j], inputActivationFunction);
             }
         }
         else {

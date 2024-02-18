@@ -14,10 +14,10 @@
 #include "NeuralNetworkLib/NuralNetwork.h"
 
 int main(int argc, char* argv[]) {
-    NuralNetwork nuralNetwork(2, 1, 3, 2, 0.098);
-    nuralNetwork.SetInputActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
-    nuralNetwork.SetOutputActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
-    nuralNetwork.SetHiddenActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
+    
+    NuralNetwork nuralNetwork(2, 1, 4, 2, 0.1);
+    nuralNetwork.SetOutputActivationFunction(EActivationFunction::SIGMOID_FUNCTION);
+    nuralNetwork.SetHiddenActivationFunction(EActivationFunction::SIGMOID_FUNCTION);
     
     std::cout << nuralNetwork.Train(std::vector<std::vector<double>>{
                                         std::vector<double>{0, 0},
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
                                         std::vector<double>{1},
                                         std::vector<double>{1},
                                         std::vector<double>{0}
-                                    }, 1e-2, 1e5) <<
+                                    }, 1e-2, 1e3) <<
         '\n';
 
     std::cout << std::fixed;
