@@ -1,9 +1,21 @@
-﻿#include "NuralNetwork.h"
+﻿// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
+// //FileName: NuralNetwork.cpp
+// //FileType: Visual C++ Source file
+// //Author : Anders P. Åsbø
+// //Created On : 20/2/2024
+// //Last Modified On : 20/2/2024
+// //Description :
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
 
-#include <iostream>
+#include "NuralNetwork.h"
 
 NuralNetwork::NuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer,
-                           double learningRate) : _numInputs(numInputs), _numOutputs(numOutputs), _numHiddenLayers(numHiddenLayers), _numNeuronsPerHiddenLayer(numNeuronsPerHiddenLayer), _learningRate(learningRate) {
+                           double learningRate) : _numInputs(numInputs), _numOutputs(numOutputs),
+                                                  _numHiddenLayers(numHiddenLayers),
+                                                  _numNeuronsPerHiddenLayer(numNeuronsPerHiddenLayer),
+                                                  _learningRate(learningRate) {
     _layers = std::vector<NeuronLayer>();
     _layers.reserve(_numHiddenLayers + 1);
 
@@ -23,10 +35,8 @@ Eigen::Vector<double, Eigen::Dynamic> NuralNetwork::FeedForward(const Eigen::Vec
     Eigen::Vector<double, Eigen::Dynamic> outputs = inputs;
     EActivationFunction activationFunction = hiddenActivationFunction;
     for (int i = 0; i < static_cast<int>(_layers.size()); ++i) {
-        if (i >= static_cast<int>(_layers.size()) - 1) {
-            activationFunction = outputActivationFunction;
-        }
-        
+        if (i >= static_cast<int>(_layers.size()) - 1) { activationFunction = outputActivationFunction; }
+
         outputs = _layers[i].CalcOutputs(outputs, activationFunction);
     }
     return outputs;
@@ -43,91 +53,80 @@ void NuralNetwork::UpdateWeightsAndBiases(const Eigen::Vector<double, Eigen::Dyn
 
 double NuralNetwork::BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs,
                                    const Eigen::Vector<double, Eigen::Dynamic>& targets) {
-
     const Eigen::Vector<double, Eigen::Dynamic> outputs = FeedForward(inputs);
     Eigen::Vector<double, Eigen::Dynamic> outputErrors = targets - outputs;
 
     const double meanSquareError = outputErrors.squaredNorm() / _numOutputs;
-    
+
     _neuronDeltas = std::vector<Eigen::Vector<double, Eigen::Dynamic>>(_layers.size());
-    for (int i = 0; i < _neuronDeltas.size(); ++i) {
+    for (int i = 0; i < static_cast<int>(_neuronDeltas.size()); ++i) {
         _neuronDeltas[i] = Eigen::Vector<double, Eigen::Dynamic>(_layers[i].numNeurons);
     }
-    
+
     const auto numLayers = static_cast<int>(_layers.size());
     for (int i = numLayers - 1; i >= 0; --i) {
         if (i >= numLayers - 1) {
             for (int j = 0; j < _numOutputs; ++j) {
-                _neuronDeltas.back()[j] = outputErrors[j] * ActivationLib::ActivationFunctionDerivative(_layers.back().outputs[j], outputActivationFunction);
+                _neuronDeltas.back()[j] = outputErrors[j] * ActivationLib::ActivationFunctionDerivative(
+                    _layers.back().outputs[j], outputActivationFunction);
             }
         }
         else {
-            _neuronDeltas[i] = _layers[i+1].weights.transpose() * _neuronDeltas[i+1];
+            _neuronDeltas[i] = _layers[i + 1].weights.transpose() * _neuronDeltas[i + 1];
             for (int j = 0; j < _neuronDeltas[i].size(); ++j) {
-                _neuronDeltas[i][j] *= ActivationLib::ActivationFunctionDerivative(_layers[i].outputs[j], hiddenActivationFunction);
+                _neuronDeltas[i][j] *= ActivationLib::ActivationFunctionDerivative(
+                    _layers[i].outputs[j], hiddenActivationFunction);
             }
         }
     }
 
     for (int i = 0; i < static_cast<int>(_layers.size()); ++i) {
-        if (i < 1) {
-            UpdateWeightsAndBiases(outputErrors, i);
-        }
-        else {
-            UpdateWeightsAndBiases(_neuronDeltas[i], i);
-        }
+        if (i < 1) { UpdateWeightsAndBiases(outputErrors, i); }
+        else { UpdateWeightsAndBiases(_neuronDeltas[i], i); }
     }
-    
+
     return meanSquareError;
 }
 
-std::string NuralNetwork::Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, const int numEpochs) {
+std::string NuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
+                                const std::vector<std::vector<double>>& targets, const int numEpochs) {
     std::string result;
-    
+
     for (int i = 0; i < numEpochs; ++i) {
         double meanSquareError = 0;
-        for (int j = 0; j < inputs.size(); ++j) {
+        for (int j = 0; j < static_cast<int>(inputs.size()); ++j) {
             auto input = Eigen::Vector<double, Eigen::Dynamic>(inputs[j].size());
-            for (int k = 0; k < inputs[j].size(); ++k) {
-                input[k] = inputs[j][k];
-            }
+            for (int k = 0; k < static_cast<int>(inputs[j].size()); ++k) { input[k] = inputs[j][k]; }
             auto target = Eigen::Vector<double, Eigen::Dynamic>(targets[j].size());
-            for (int k = 0; k < targets[j].size(); ++k) {
-                target[k] = targets[j][k];
-            }
+            for (int k = 0; k < static_cast<int>(targets[j].size()); ++k) { target[k] = targets[j][k]; }
             meanSquareError += BackPropagate(input, target);
         }
-        result += "Epoch " + std::to_string(i) + " Mean Square Error: " + std::to_string(meanSquareError) + "\n";
+        result += "Epoch " + std::to_string(i) + ", Mean Square Error: " + std::to_string(meanSquareError) + "\n";
     }
-    
+
     return result;
 }
 
 std::string NuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
-    const std::vector<std::vector<double>>& targets, double maxError, int maxEpochs) {
-
+                                const std::vector<std::vector<double>>& targets, const double maxError,
+                                const int maxEpochs) {
     std::string result{};
     double meanSquareError{std::numeric_limits<double>::max()};
     int i{};
-    
+
     while (meanSquareError > maxError && maxEpochs > i++) {
         meanSquareError = 0;
-        
-        for (int j = 0; j < inputs.size(); ++j) {
+
+        for (int j = 0; j < static_cast<int>(inputs.size()); ++j) {
             auto input = Eigen::Vector<double, Eigen::Dynamic>(inputs[j].size());
-            for (int k = 0; k < static_cast<int>(inputs[j].size()); ++k) {
-                input[k] = inputs[j][k];
-            }
+            for (int k = 0; k < static_cast<int>(inputs[j].size()); ++k) { input[k] = inputs[j][k]; }
             auto target = Eigen::Vector<double, Eigen::Dynamic>(targets[j].size());
-            for (int k = 0; k < static_cast<int>(targets[j].size()); ++k) {
-                target[k] = targets[j][k];
-            }
+            for (int k = 0; k < static_cast<int>(targets[j].size()); ++k) { target[k] = targets[j][k]; }
             meanSquareError += BackPropagate(input, target);
         }
-        
+
         result += "Epoch " + std::to_string(i) + " Mean Square Error: " + std::to_string(meanSquareError) + "\n";
     }
-    
+
     return result;
 }
-

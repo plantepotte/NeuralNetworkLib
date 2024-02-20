@@ -13,7 +13,7 @@ NeuronLayer::NeuronLayer(int numberOfNeurons, int numberOfNeuronInputs): numNeur
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};  //here you could also set a seed
-    std::normal_distribution<double> distribution{0., 1.};
+    std::uniform_real_distribution<double> distribution{-1, 1};
     
     // Initialize the outputs, weights and biases with zeros, random values and random values, respectively
     outputs = Eigen::VectorXd::Zero(numNeurons);
@@ -31,8 +31,8 @@ Eigen::Vector<double, Eigen::Dynamic> NeuronLayer::CalcOutputs(const Eigen::Vect
     Eigen::Vector<double, Eigen::Dynamic> activatedOutputs = outputs;
 
     // Apply the activation function to each output
-    for (int i = 0; i < static_cast<int>(outputs.size()); ++i) {
-        activatedOutputs[i] = ActivationLib::ActivationFunction(outputs[i], activationFunction);
+    for (auto& activatedOutput : activatedOutputs) {
+        activatedOutput = ActivationLib::ActivationFunction(activatedOutput, activationFunction);
     }
     return activatedOutputs;
 }

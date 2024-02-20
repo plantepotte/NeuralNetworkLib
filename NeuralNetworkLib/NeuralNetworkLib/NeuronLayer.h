@@ -13,7 +13,7 @@
 // using Eigen 3.4.0 (https://eigen.tuxfamily.org/index.php?title=Main_Page)
 // for linear algebra operations and data structures
 #include "ActivationLib.h"
-#include <Eigen/Eigen>
+#include "../Eigen/Eigen"
 
 class Neuron;
 
