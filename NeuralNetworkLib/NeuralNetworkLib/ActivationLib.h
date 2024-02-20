@@ -16,7 +16,8 @@ enum class EActivationFunction {
     HEAVISIDE_STEP_FUNCTION,
     SIGMOID_FUNCTION,
     HYPERBOLIC_TANGENT_FUNCTION,
-    RELU_FUNCTION
+    RELU_FUNCTION,
+    NONE
 };
 
 class ActivationLib {

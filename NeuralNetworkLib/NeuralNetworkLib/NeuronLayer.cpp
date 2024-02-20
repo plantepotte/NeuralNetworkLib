@@ -12,25 +12,27 @@ void NeuronLayer::CalcOutputs() {
 NeuronLayer::NeuronLayer(int numberOfNeurons, int numberOfNeuronInputs): numNeurons(numberOfNeurons), numNeuronInputs(numberOfNeuronInputs) {
 
     std::random_device rd{};
-    std::mt19937 gen(rd());  //here you could also set a seed
-    std::normal_distribution<double> dis(0, 0.5);
+    std::mt19937_64 gen{rd()};  //here you could also set a seed
+    std::normal_distribution<double> distribution{0., 1.};
     
     // Initialize the outputs, weights and biases with zeros, random values and random values, respectively
     outputs = Eigen::VectorXd::Zero(numNeurons);
-    weights = Eigen::MatrixXd::NullaryExpr(numNeurons, numNeuronInputs, [&dis, &gen](){ return dis(gen); });
-    biases = Eigen::VectorXd::NullaryExpr(numNeurons, [&dis, &gen](){ return dis(gen); });
+    weights = Eigen::MatrixXd::NullaryExpr(numNeurons, numNeuronInputs, [&distribution, &gen](){ return distribution(gen); });
+    biases = Eigen::VectorXd::NullaryExpr(numNeurons, [&distribution, &gen](){ return distribution(gen); });
 
     // std::cout << "Weights: " << weights << '\n';
     // std::cout << "Biases: " << biases << '\n';
 }
 
-Eigen::Vector<double, Eigen::Dynamic> NeuronLayer::CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& Inputs) {
+Eigen::Vector<double, Eigen::Dynamic> NeuronLayer::CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& Inputs, EActivationFunction activationFunction) {
     inputs = Inputs;
+    
     CalcOutputs();
     Eigen::Vector<double, Eigen::Dynamic> activatedOutputs = outputs;
+
     // Apply the activation function to each output
-    for (double& output : activatedOutputs) {
-        output = ActivationLib::ActivationFunction(output, activationFunction);
+    for (int i = 0; i < static_cast<int>(outputs.size()); ++i) {
+        activatedOutputs[i] = ActivationLib::ActivationFunction(outputs[i], activationFunction);
     }
     return activatedOutputs;
 }

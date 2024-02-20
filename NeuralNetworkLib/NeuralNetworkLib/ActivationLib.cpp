@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-double ActivationLib::ActivationFunction(const double x, EActivationFunction activationFunction) {
+double ActivationLib::ActivationFunction(double x, EActivationFunction activationFunction) {
     switch (activationFunction) {
     case EActivationFunction::HEAVISIDE_STEP_FUNCTION:
         return HeavisideStepFunction(x);
@@ -12,11 +12,13 @@ double ActivationLib::ActivationFunction(const double x, EActivationFunction act
         return HyperbolicTangentFunction(x);
     case EActivationFunction::RELU_FUNCTION:
         return ReLUFunction(x);
+    case EActivationFunction::NONE:
+        return x;
     }
     throw std::invalid_argument("Invalid activation function");
 }
 
-double ActivationLib::ActivationFunctionDerivative(const double x, EActivationFunction activationFunction) {
+double ActivationLib::ActivationFunctionDerivative(double x, EActivationFunction activationFunction) {
     switch (activationFunction) {
     case EActivationFunction::HEAVISIDE_STEP_FUNCTION:
         return HeavisideStepFunctionDerivative();
@@ -26,6 +28,8 @@ double ActivationLib::ActivationFunctionDerivative(const double x, EActivationFu
         return HyperbolicTangentFunctionDerivative(x);
     case EActivationFunction::RELU_FUNCTION:
         return ReLUFunctionDerivative(x);
+    case EActivationFunction::NONE:
+        return 1.;
     }
     throw std::invalid_argument("Invalid activation function");
 }

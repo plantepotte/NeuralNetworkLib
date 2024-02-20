@@ -15,9 +15,9 @@
 
 int main(int argc, char* argv[]) {
     
-    NuralNetwork nuralNetwork(2, 1, 4, 2, 0.1);
-    nuralNetwork.SetOutputActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
-    nuralNetwork.SetHiddenActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
+    NuralNetwork nuralNetwork(2, 1, 4, 4, 0.098);
+    nuralNetwork.SetOutputActivationFunction(EActivationFunction::SIGMOID_FUNCTION);
+    nuralNetwork.SetHiddenActivationFunction(EActivationFunction::SIGMOID_FUNCTION);
     
     std::cout << nuralNetwork.Train(std::vector<std::vector<double>>{
                                         std::vector<double>{0, 0},
@@ -30,14 +30,14 @@ int main(int argc, char* argv[]) {
                                         std::vector<double>{1},
                                         std::vector<double>{1},
                                         std::vector<double>{0}
-                                    }, 1e-2, 1e4) <<
+                                    }, 1e-2, 1e5) <<
         '\n';
 
-    std::cout << std::fixed;
-    std::cout << "0, 0: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({0, 0}))[0] << '\n';
-    std::cout << "0, 1: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({0, 1}))[0] << '\n';
-    std::cout << "1, 0: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({1, 0}))[0] << '\n';
-    std::cout << "1, 1: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({1, 1}))[0] << '\n';
+    // std::cout << std::fixed;
+    std::cout << "0, 0: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({0, 0})) << '\n';
+    std::cout << "0, 1: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({0, 1})) << '\n';
+    std::cout << "1, 0: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({1, 0})) << '\n';
+    std::cout << "1, 1: " << nuralNetwork.FeedForward(Eigen::Vector<double, 2>({1, 1})) << '\n';
 
     return 0;
 }

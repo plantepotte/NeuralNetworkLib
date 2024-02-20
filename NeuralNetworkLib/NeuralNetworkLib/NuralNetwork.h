@@ -25,6 +25,7 @@ private:
 
     std::vector<NeuronLayer> _layers{};
     std::vector<Eigen::Vector<double, Eigen::Dynamic>> _neuronDeltas{};
+    void UpdateWeightsAndBiases(const Eigen::Vector<double, Eigen::Dynamic>& grad, int i);
 
 public:
     EActivationFunction outputActivationFunction{};
