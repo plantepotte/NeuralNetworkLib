@@ -9,13 +9,13 @@
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
 
-#include "NuralNetwork.h"
+#include "NeuralNetwork.h"
 
-NuralNetwork::NuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer,
-                           double learningRate) : _numInputs(numInputs), _numOutputs(numOutputs),
-                                                  _numHiddenLayers(numHiddenLayers),
-                                                  _numNeuronsPerHiddenLayer(numNeuronsPerHiddenLayer),
-                                                  _learningRate(learningRate) {
+NeuralNetwork::NeuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer,
+                             double learningRate) : _numInputs(numInputs), _numOutputs(numOutputs),
+                                                    _numHiddenLayers(numHiddenLayers),
+                                                    _numNeuronsPerHiddenLayer(numNeuronsPerHiddenLayer),
+                                                    _learningRate(learningRate) {
     _layers = std::vector<NeuronLayer>();
     _layers.reserve(_numHiddenLayers + 1);
 
@@ -31,7 +31,7 @@ NuralNetwork::NuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, i
     _layers.emplace_back(_numOutputs, _layers.back().numNeurons);
 }
 
-Eigen::Vector<double, Eigen::Dynamic> NuralNetwork::FeedForward(const Eigen::Vector<double, Eigen::Dynamic>& inputs) {
+Eigen::Vector<double, Eigen::Dynamic> NeuralNetwork::FeedForward(const Eigen::Vector<double, Eigen::Dynamic>& inputs) {
     Eigen::Vector<double, Eigen::Dynamic> outputs = inputs;
     EActivationFunction activationFunction = hiddenActivationFunction;
     for (int i = 0; i < static_cast<int>(_layers.size()); ++i) {
@@ -42,7 +42,7 @@ Eigen::Vector<double, Eigen::Dynamic> NuralNetwork::FeedForward(const Eigen::Vec
     return outputs;
 }
 
-void NuralNetwork::UpdateWeightsAndBiases(const Eigen::Vector<double, Eigen::Dynamic>& grad, const int i) {
+void NeuralNetwork::UpdateWeightsAndBiases(const Eigen::Vector<double, Eigen::Dynamic>& grad, const int i) {
     for (int row = 0; row < _layers[i].weights.rows(); ++row) {
         for (int col = 0; col < _layers[i].weights.cols(); ++col) {
             _layers[i].weights(row, col) += _learningRate * grad[row] * _layers[i].inputs[col];
@@ -51,7 +51,7 @@ void NuralNetwork::UpdateWeightsAndBiases(const Eigen::Vector<double, Eigen::Dyn
     _layers[i].biases += _learningRate * _neuronDeltas[i];
 }
 
-double NuralNetwork::BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs,
+double NeuralNetwork::BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs,
                                    const Eigen::Vector<double, Eigen::Dynamic>& targets) {
     const Eigen::Vector<double, Eigen::Dynamic> outputs = FeedForward(inputs);
     Eigen::Vector<double, Eigen::Dynamic> outputErrors = targets - outputs;
@@ -88,7 +88,7 @@ double NuralNetwork::BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& 
     return meanSquareError;
 }
 
-std::string NuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
+std::string NeuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
                                 const std::vector<std::vector<double>>& targets, const int numEpochs) {
     std::string result;
 
@@ -107,7 +107,7 @@ std::string NuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
     return result;
 }
 
-std::string NuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
+std::string NeuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
                                 const std::vector<std::vector<double>>& targets, const double maxError,
                                 const int maxEpochs) {
     std::string result{};

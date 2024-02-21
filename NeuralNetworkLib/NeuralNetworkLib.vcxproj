@@ -157,12 +157,12 @@
     <ClCompile Include="NeuralNetworkLib.cpp" />
     <ClCompile Include="NeuralNetworkLib\ActivationLib.cpp" />
     <ClCompile Include="NeuralNetworkLib\NeuronLayer.cpp" />
-    <ClCompile Include="NeuralNetworkLib\NuralNetwork.cpp" />
+    <ClCompile Include="NeuralNetworkLib\NeuralNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NeuralNetworkLib\ActivationLib.h" />
     <ClInclude Include="NeuralNetworkLib\NeuronLayer.h" />
-    <ClInclude Include="NeuralNetworkLib\NuralNetwork.h" />
+    <ClInclude Include="NeuralNetworkLib\NeuralNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,7 +14,7 @@
 #include "NeuronLayer.h"
 
 
-class NuralNetwork {
+class NeuralNetwork {
 
 private:
     int _numInputs{};
@@ -31,8 +31,8 @@ public:
     EActivationFunction outputActivationFunction{};
     EActivationFunction hiddenActivationFunction{};
     
-    NuralNetwork() = default;
-    NuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer, double learningRate);
+    NeuralNetwork() = default;
+    NeuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer, double learningRate);
 
     void SetOutputActivationFunction(const EActivationFunction activationFunction) {
         outputActivationFunction = activationFunction;
