@@ -1,10 +1,10 @@
 ﻿// //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
-// //FileName: NuralNetwork.h
+// //FileName: NeuralNetwork.h
 // //FileType: Visual C++ Source file
 // //Author : Anders P. Åsbø
-// //Created On : 12/2/2024
-// //Last Modified On : 12/2/2024
+// //Created On : 22/2/2024
+// //Last Modified On : 22/2/2024
 // //Description :
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
@@ -15,7 +15,6 @@
 
 
 class NeuralNetwork {
-
 private:
     int _numInputs{};
     int _numOutputs{};
@@ -25,27 +24,85 @@ private:
 
     std::vector<NeuronLayer> _layers{};
     std::vector<Eigen::Vector<double, Eigen::Dynamic>> _neuronDeltas{};
+
+    /**
+     * \brief update the weights and biases of a layer
+     * \param grad gradient vector to use
+     * \param i layer index
+     */
     void UpdateWeightsAndBiases(const Eigen::Vector<double, Eigen::Dynamic>& grad, int i);
 
+    EActivationFunction _outputActivationFunction{};
+    EActivationFunction _hiddenActivationFunction{};
+
 public:
-    EActivationFunction outputActivationFunction{};
-    EActivationFunction hiddenActivationFunction{};
-    
+    /**
+     * \brief Construct empty neural network
+     */
     NeuralNetwork() = default;
-    NeuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer, double learningRate);
 
+    /**
+     * \brief Construct a neural network with a given number of inputs, outputs, hidden layers, neurons per hidden layer and learning rate
+     * \param numInputs number of inputs to the network
+     * \param numOutputs number of outputs from the network
+     * \param numHiddenLayers number of hidden layers in the network
+     * \param numNeuronsPerHiddenLayer number of neurons in each hidden layer
+     * \param learningRate learning rate of the network
+     */
+    NeuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer,
+                  double learningRate);
+
+    /**
+     * \brief set the activation function of the output layer
+     * \param activationFunction given activation function
+     */
     void SetOutputActivationFunction(const EActivationFunction activationFunction) {
-        outputActivationFunction = activationFunction;
+        _outputActivationFunction = activationFunction;
     }
 
+    /**
+     * \brief set the activation function of the hidden layers
+     * \param activationFunction given activation function
+     */
     void SetHiddenActivationFunction(const EActivationFunction activationFunction) {
-        hiddenActivationFunction = activationFunction;
+        _hiddenActivationFunction = activationFunction;
     }
 
+    /**
+     * \brief feed forward the inputs through the network
+     * \param inputs input vector
+     * \return output vector
+     */
     Eigen::Vector<double, Eigen::Dynamic> FeedForward(const Eigen::Vector<double, Eigen::Dynamic>& inputs);
 
-    double BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs, const Eigen::Vector<double, Eigen::Dynamic>& targets);
+    /**
+     * \brief back propagate the error through the network
+     * \param inputs vector of inputs
+     * \param targets vector of targets
+     * \return 
+     */
+    double BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs,
+                         const Eigen::Vector<double, Eigen::Dynamic>& targets);
 
-    std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, int numEpochs);
-    std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets, double maxError = 1e-3, int maxEpochs = 1000);
+    /**
+     * \brief train the network for a given number of epochs
+     * \param inputs vector of input vectors
+     * \param targets vector of target vectors
+     * \param numEpochs number of epochs to train
+     * \return 
+     */
+    std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets,
+                      int numEpochs);
+
+    /**
+     * \brief train the network until the error is below a given threshold
+     *  or the number of epochs exceeds a given maximum
+     * \param inputs vector of input vectors
+     * \param targets vector of target vectors
+     * \param maxError error threshold
+     * \param maxEpochs maximum number of epochs
+     * \return 
+     */
+    std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets,
+                      double maxError = 1e-3, int maxEpochs = 1000);
 };

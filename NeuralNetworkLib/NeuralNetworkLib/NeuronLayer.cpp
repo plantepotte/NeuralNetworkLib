@@ -15,7 +15,7 @@
 
 
 void NeuronLayer::CalcOutputs() {
-    // perform the dot product of the weights and inputs and add the biases
+    // in-place calculation of the outputs using matrix multiplication and vector addition
     outputs = weights * inputs + biases;
 }
 
