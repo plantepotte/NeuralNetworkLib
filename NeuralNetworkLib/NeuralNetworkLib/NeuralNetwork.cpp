@@ -10,6 +10,8 @@
 // //////////////////////////////
 
 #include "NeuralNetwork.h"
+#include <fstream>
+#include <iostream>
 
 NeuralNetwork::NeuralNetwork(int numInputs, int numOutputs, int numHiddenLayers, int numNeuronsPerHiddenLayer,
                              double learningRate) : _numInputs(numInputs), _numOutputs(numOutputs),
@@ -56,11 +58,12 @@ void NeuralNetwork::UpdateWeightsAndBiases(const Eigen::Vector<double, Eigen::Dy
             _layers[i].weights(row, col) += _learningRate * grad[row] * _layers[i].inputs[col];
         }
     }
-    _layers[i].biases += _learningRate * _neuronDeltas[i];
+    _layers[i].biases += _learningRate * grad;
 }
 
 double NeuralNetwork::BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>& inputs,
                                     const Eigen::Vector<double, Eigen::Dynamic>& targets) {
+
     // calculate the outputs of the network and the errors
     const Eigen::Vector<double, Eigen::Dynamic> outputs = FeedForward(inputs);
     Eigen::Vector<double, Eigen::Dynamic> outputErrors = targets - outputs;
@@ -75,30 +78,32 @@ double NeuralNetwork::BackPropagate(const Eigen::Vector<double, Eigen::Dynamic>&
     }
 
     const auto numLayers = static_cast<int>(_layers.size());
-    for (int i = numLayers - 1; i >= 0; --i) {
-        if (i >= numLayers - 1) {
-            // output layer
-            for (int j = 0; j < _numOutputs; ++j) {
-                // calculate the neuron deltas of the output layer
-                _neuronDeltas.back()[j] = outputErrors[j] * ActivationLib::ActivationFunctionDerivative(
-                    _layers.back().outputs[j], _outputActivationFunction);
-            }
-        }
-        else {
-            // calculate the neuron deltas of the hidden layers
-            _neuronDeltas[i] = _layers[i + 1].weights.transpose() * _neuronDeltas[i + 1];
-            for (int j = 0; j < _neuronDeltas[i].size(); ++j) {
-                _neuronDeltas[i][j] *= ActivationLib::ActivationFunctionDerivative(
-                    _layers[i].outputs[j], _hiddenActivationFunction);
-            }
+
+    // calculate deltas of output layer
+    for (int j = 0; j < _numOutputs; ++j) {
+        // calculate the neuron deltas of the output layer
+        _neuronDeltas.back()[j] = outputErrors[j] * ActivationLib::ActivationFunctionDerivative(
+            _layers.back().outputs[j], _outputActivationFunction);
+    }
+    
+    // calculate the neuron deltas of the hidden layers
+    for (int i = numLayers - 2; i >= 0; --i) {
+        
+        // calculate vector of weights * neuronDeltas for subsequent layer
+        _neuronDeltas[i] = _layers[i + 1].weights.transpose() * _neuronDeltas[i + 1];
+
+        // multiply gradient sums with the derivative of the activation function
+        for (int j = 0; j < _neuronDeltas[i].size(); ++j) {
+            _neuronDeltas[i][j] *= ActivationLib::ActivationFunctionDerivative(
+                _layers[i].outputs[j], _hiddenActivationFunction);
         }
     }
 
     // update the weights and biases
-    for (int i = 0; i < static_cast<int>(_layers.size()); ++i) {
-        if (i < 1) { UpdateWeightsAndBiases(outputErrors, i); }
-        else { UpdateWeightsAndBiases(_neuronDeltas[i], i); }
+    for (int i = 0; i < numLayers-1; ++i) {
+        UpdateWeightsAndBiases(_neuronDeltas[i], i);
     }
+    UpdateWeightsAndBiases(outputErrors, numLayers - 1);
 
     return meanSquareError;
 }
@@ -147,4 +152,73 @@ std::string NeuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
     }
 
     return result;
+}
+
+bool NeuralNetwork::SaveToFile(const std::string& filename) {
+    std::ofstream file(filename);
+
+    if (file.is_open()) {
+        // save the network parameters
+        file << _numInputs << " " << _numOutputs << " " << _numHiddenLayers << " " << _numNeuronsPerHiddenLayer << " "
+             << _learningRate << " " << static_cast<int>(_hiddenActivationFunction) << " "
+             << static_cast<int>(_outputActivationFunction) << "\n";
+
+        // save the layers
+        for (const auto& layer : _layers) {
+            file << layer.numNeurons << " " << layer.numNeuronInputs << "\n";
+            for (int i = 0; i < layer.weights.rows(); ++i) {
+                for (int j = 0; j < layer.weights.cols(); ++j) {
+                    file << layer.weights(i, j) << " ";
+                }
+                file << "\n";
+            }
+            for (const double bias : layer.biases) {
+                file << bias << " ";
+            }
+            file << "\n";
+        }
+        return true;
+    }
+    else {
+        std::cerr << "Could not open file " << filename << '\n';
+        return false;
+    }
+}
+
+bool NeuralNetwork::LoadFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+
+    if (file.is_open()) {
+        // load the network parameters
+        file >> _numInputs >> _numOutputs >> _numHiddenLayers >> _numNeuronsPerHiddenLayer >> _learningRate;
+        
+        int hiddenActivationFunction, outputActivationFunction;
+        file >> hiddenActivationFunction >> outputActivationFunction;
+        
+        _hiddenActivationFunction = static_cast<EActivationFunction>(hiddenActivationFunction);
+        _outputActivationFunction = static_cast<EActivationFunction>(outputActivationFunction);
+
+        _layers.clear();
+        _layers.reserve(_numHiddenLayers + 1);
+
+        // load the layers
+        for (int i = 0; i < _numHiddenLayers + 1; ++i) {
+            int numNeurons, numNeuronInputs;
+            file >> numNeurons >> numNeuronInputs;
+            _layers.emplace_back(numNeurons, numNeuronInputs);
+            for (int j = 0; j < _layers[i].weights.rows(); ++j) {
+                for (int k = 0; k < _layers[i].weights.cols(); ++k) {
+                    file >> _layers[i].weights(j, k);
+                }
+            }
+            for (double& bias : _layers[i].biases) {
+                file >> bias;
+            }
+        }
+        return true;
+    }
+    else {
+        std::cerr << "Could not open file " << filename << '\n';
+        return false;
+    }
 }

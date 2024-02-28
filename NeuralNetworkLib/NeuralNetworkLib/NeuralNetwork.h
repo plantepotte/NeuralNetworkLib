@@ -105,4 +105,9 @@ public:
      */
     std::string Train(const std::vector<std::vector<double>>& inputs, const std::vector<std::vector<double>>& targets,
                       double maxError = 1e-3, int maxEpochs = 1000);
+
+    bool SaveToFile(const std::string& filename);
+
+    bool LoadFromFile(const std::string& filename);
+     
 };

@@ -19,6 +19,10 @@ int main(int argc, char* argv[]) {
     neuralNetwork.SetHiddenActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
     neuralNetwork.SetOutputActivationFunction(EActivationFunction::SIGMOID_FUNCTION);
 
+    if (neuralNetwork.LoadFromFile("neuralNetwork.txt")) {
+        std::cout << "Loaded neural network from file\n";
+    }
+
     const auto inputs = std::vector<std::vector<double>>{
         std::vector<double>{0, 0, 0},
         std::vector<double>{0, 0, 1},
@@ -41,7 +45,11 @@ int main(int argc, char* argv[]) {
         std::vector<double>{0, 0, 0}
     };
     
-    std::cout << neuralNetwork.Train(inputs, targets, 1e-1, static_cast<int>(1e6)) << '\n';
+    std::cout << neuralNetwork.Train(inputs, targets, 1e-2, static_cast<int>(1e6)) << '\n';
+
+    if (neuralNetwork.SaveToFile("neuralNetwork.txt")) {
+        std::cout << "Saved neural network to file\n";
+    }
     
     // std::cout << std::fixed;
     for (auto& input : inputs) {
