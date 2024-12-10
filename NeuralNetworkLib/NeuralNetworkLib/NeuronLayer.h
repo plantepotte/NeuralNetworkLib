@@ -15,8 +15,6 @@
 #include "ActivationLib.h"
 #include "../Eigen/Eigen"
 
-class Neuron;
-
 class NeuronLayer {
 private:
     /**
