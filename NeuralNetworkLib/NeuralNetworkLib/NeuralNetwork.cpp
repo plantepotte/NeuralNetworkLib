@@ -189,10 +189,9 @@ bool NeuralNetwork::SaveToFile(const std::string& filename) {
         }
         return true;
     }
-    else {
-        std::cerr << "Could not open file " << filename << '\n';
-        return false;
-    }
+
+    std::cerr << "Could not open file " << filename << '\n';
+    return false;
 }
 
 bool NeuralNetwork::LoadFromFile(const std::string& filename) {
@@ -227,8 +226,7 @@ bool NeuralNetwork::LoadFromFile(const std::string& filename) {
         }
         return true;
     }
-    else {
-        std::cerr << "Could not open file " << filename << '\n';
-        return false;
-    }
+
+    std::cerr << "Could not open file " << filename << '\n';
+    return false;
 }
