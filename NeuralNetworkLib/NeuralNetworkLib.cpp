@@ -14,7 +14,8 @@
 #include "NeuralNetworkLib/NeuralNetwork.h"
 
 int main(int argc, char* argv[]) {
-    
+
+    // neural network binary counter example
     NeuralNetwork neuralNetwork(3, 3, 2, 9, 0.2);
     neuralNetwork.SetHiddenActivationFunction(EActivationFunction::HYPERBOLIC_TANGENT_FUNCTION);
     neuralNetwork.SetOutputActivationFunction(EActivationFunction::SIGMOID_FUNCTION);
