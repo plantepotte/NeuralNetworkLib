@@ -9,9 +9,12 @@
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
 
-#pragma once
+
 // using Eigen 3.4.0 (https://eigen.tuxfamily.org/index.php?title=Main_Page)
 // for linear algebra operations and data structures
+#ifndef NEURONLAYER_H
+#define NEURONLAYER_H
+
 #include "ActivationLib.h"
 #include "../Eigen/Eigen"
 
@@ -51,3 +54,4 @@ public:
     Eigen::Vector<double, Eigen::Dynamic> CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& inputs,
                                                       EActivationFunction activationFunction);
 };
+#endif // NEURONLAYER_H

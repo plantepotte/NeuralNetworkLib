@@ -8,8 +8,9 @@
 // //Description :
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
+#ifndef ACTIVATIONLIB_H
+#define ACTIVATIONLIB_H
 
-#pragma once
 #include <cmath>
 
 /**
@@ -109,3 +110,4 @@ public:
      */
     static double ReLUFunctionDerivative(const double x) { return x > 0.0 ? 1.0 : 0.0; }
 };
+#endif // ACTIVATIONLIB_H

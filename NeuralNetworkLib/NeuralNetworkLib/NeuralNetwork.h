@@ -8,8 +8,10 @@
 // //Description :
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
+#ifndef NEURALNETWORK_H
+#define NEURALNETWORK_H
 
-#pragma once
+
 #include <vector>
 #include "NeuronLayer.h"
 
@@ -111,3 +113,4 @@ public:
     bool LoadFromFile(const std::string& filename);
      
 };
+#endif // NEURALNETWORK_H
