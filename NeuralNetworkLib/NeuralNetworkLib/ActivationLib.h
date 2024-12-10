@@ -12,11 +12,12 @@
 #define ACTIVATIONLIB_H
 
 #include <cmath>
+#include <cstdint>
 
 /**
  * \brief Enum class to represent the different activation functions
  */
-enum class EActivationFunction {
+enum class EActivationFunction : uint8_t {
     HEAVISIDE_STEP_FUNCTION,
     SIGMOID_FUNCTION,
     HYPERBOLIC_TANGENT_FUNCTION,
