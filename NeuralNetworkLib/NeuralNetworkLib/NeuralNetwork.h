@@ -42,7 +42,7 @@ public:
     NeuralNetwork() = default;
 
     /**
-     * \brief Construct a neural network with a given number of inputs, outputs, hidden layers, neurons per hidden layer and learning rate
+     * \brief Construct a neural network with a given parameters
      * \param numInputs number of inputs to the network
      * \param numOutputs number of outputs from the network
      * \param numHiddenLayers number of hidden layers in the network

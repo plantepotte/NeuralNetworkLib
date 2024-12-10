@@ -118,9 +118,13 @@ std::string NeuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
         // loop through the inputs and targets and back propagate the error
         for (int j = 0; j < static_cast<int>(inputs.size()); ++j) {
             auto input = Eigen::Vector<double, Eigen::Dynamic>(inputs[j].size());
-            for (int k = 0; k < static_cast<int>(inputs[j].size()); ++k) { input[k] = inputs[j][k]; }
+            for (int k = 0; k < static_cast<int>(inputs[j].size()); ++k) {
+                input[k] = inputs[j][k];
+            }
             auto target = Eigen::Vector<double, Eigen::Dynamic>(targets[j].size());
-            for (int k = 0; k < static_cast<int>(targets[j].size()); ++k) { target[k] = targets[j][k]; }
+            for (int k = 0; k < static_cast<int>(targets[j].size()); ++k) {
+                target[k] = targets[j][k];
+            }
             meanSquareError += BackPropagate(input, target);
         }
         result += "Epoch " + std::to_string(i) + ", Mean Square Error: " + std::to_string(meanSquareError) + "\n";
@@ -141,10 +145,16 @@ std::string NeuralNetwork::Train(const std::vector<std::vector<double>>& inputs,
         meanSquareError = 0;
 
         for (int j = 0; j < static_cast<int>(inputs.size()); ++j) {
+            
             auto input = Eigen::Vector<double, Eigen::Dynamic>(inputs[j].size());
-            for (int k = 0; k < static_cast<int>(inputs[j].size()); ++k) { input[k] = inputs[j][k]; }
+            for (int k = 0; k < static_cast<int>(inputs[j].size()); ++k) {
+                input[k] = inputs[j][k];
+            }
+            
             auto target = Eigen::Vector<double, Eigen::Dynamic>(targets[j].size());
-            for (int k = 0; k < static_cast<int>(targets[j].size()); ++k) { target[k] = targets[j][k]; }
+            for (int k = 0; k < static_cast<int>(targets[j].size()); ++k) {
+                target[k] = targets[j][k];
+            }
             meanSquareError += BackPropagate(input, target);
         }
 

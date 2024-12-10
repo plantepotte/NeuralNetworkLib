@@ -28,11 +28,12 @@ NeuronLayer::NeuronLayer(int numberOfNeurons, int numberOfNeuronInputs): numNeur
 
     // Initialize the outputs, weights and biases with zeros, random values and random values, respectively
     outputs = Eigen::VectorXd::Zero(numNeurons);
-    weights = Eigen::MatrixXd::NullaryExpr(numNeurons, numNeuronInputs, [&distribution, &gen]()
-    {
-        return distribution(gen);
-    });
-    biases = Eigen::VectorXd::NullaryExpr(numNeurons, [&distribution, &gen]() { return distribution(gen); });
+    weights = Eigen::MatrixXd::NullaryExpr(numNeurons, numNeuronInputs,
+                                           [&distribution, &gen]() { return distribution(gen); }
+    );
+
+    biases = Eigen::VectorXd::NullaryExpr(numNeurons, [&distribution, &gen]() { return distribution(gen); }
+    );
 }
 
 Eigen::Vector<double, Eigen::Dynamic> NeuronLayer::CalcOutputs(const Eigen::Vector<double, Eigen::Dynamic>& Inputs,
